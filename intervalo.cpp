@@ -1,3 +1,7 @@
+#include <iostream>
+#include "intervalo.h"
+using namespace std;
+
 /** 
  * **
    @file intervalo.cpp
@@ -21,119 +25,133 @@
 
  */
 
-// Alumno1: Sanchez Rodriguez Pepa
-// Alumno2: Rodriguez Perez Pepe 
-// meter esta cabecera en todos los .h
+// Implementacion o definicion de metodos y funciones
 
-#include <iostream>
-using namespace std;
+bool Intervalo::valido(double cinf,double csup,bool cerrinf, bool cerrsup){
 
-class Intervalo{
-private:
-    bool cerradoInf;
-    bool cerradoSup;
-    double cotaInf;
-    double cotaSup;
-    
-    /**
-     * @brief comprueba que los argumentos definen un intervalo correcto
-     * cotaInferior <= cotaSuperior y algo MAS
-     * @param cotaInferior
-     * @param cotaSuperior
-     * @return @retval true si correcto
-     */
-    bool valido(double,double, bool, bool); 
+    return (( cinf < csup ) || ( cinf == csup && cerrinf == cerrsup));
+}
 
-public:
-    /** 
-     *  @brief Intervalo vacio por defectoSup
-     *  valorInf = valorSup & abiertoInf + abierto
-     */
-    Intervalo();
-    /** 
-     * @brief Crea un Intervalo  cerrado por defecto
-     * @param cotaInferior
-     * @param cotaSuperior
-     * @precond cotaInferior <= cotaSuperior
-     */
-    Intervalo(double cotaInferior, double cotaSuperior);
-    /** 
-     * @brief Crea Intervalo
-     * @param cerradoInferior
-     * @param cerradoSuperior
-     * @param cotaInferior
-     * @param cotaSuperior
-     * @precond cotaInferior <= cotaSuperior
-     */
-    Intervalo(double cotaInferior, double cotaSuperior, bool cerradoInferior, bool cerradoSuperior);
-    /** 
-     * @brief Devuelve la cota inferior del intervalo
-     * @return El valor de la cota
-     */
-    double getCotaInf()const ;
-    /** 
-     * @brief Devuelve la cota superior del intervalo
-     * @return El valor de la cota
-     */
-    double getCotaSup()const ;
-    /** 
-     * @brief Consulta si el intervalo es cerrado en su cota inferior
-     * @return @retval true si es cerrado @retval false si es cerrado
-     */
-    bool dentroCotaInf()const ;
-    /** 
-     * @brief Consulta si el intervalo es cerrado en su cota superior
-     * @return @retval true si es cerrado @retval false si es cerrado
-     */
-    bool dentroCotaSup()const ;
-    /** 
-     * @brief Define los valores del intervalo
-     * @param cerradoInferior
-     * @param cerradoSuperior
-     * @param cotaInferior
-     * @param cotaSuperior
-     * @precond cotaInferior <= cotaSuperior
-     */
-    void setIntervalo(double cotaInferior, double cotaSuperior, bool cerradoInferior, bool cerradoSuperior);
-    /** 
-     * @brief Consulta si el intervalo almacenado es vacío o no
-     * @return @retval true si es un intervalo vacío, @retval false en otro caso 
-     */
-    bool esVacio()const ;
-    /** 
-     * @brief Consulta si un determinado valor está dentro del intervalo
-     * @param n El valor consultado
-     * @return @retval true si el valor @p n pertenece al intervalo, @retval false en otro caso 
-     */
-    bool estaDentro(double n)const ;
-};
+//Constructor sin parametros
+Intervalo::Intervalo(){
 
-/******************************/
-// funciones externas
-/** 
-* @brief Imprime los valores de un intervalo de forma visual según lo indicado en el guión
-* @param  El intervalo
-*/
-void escribir(const Intervalo &i);
+    cerradoInf =false;
+    cerradoSup = false;
+    cotaInf = 0;
+    cotaSup = 0;
 
-/** 
-* @brief Lee los valores del intervalo según el formato indicado en el guión
-* @param i El intervalo
-*/
-void leer(Intervalo &i);
-/** 
-* @brief Muestra un mensaje en pantalla indicando si el intervalo es vacío o no
-* @param i El intervalo
-*/
+}
 
-void comprobarVacio(Intervalo i);
+//Constructor 1 con parametros
+Intervalo::Intervalo(double cotaInferior, double cotaSuperior){
+    cerradoInf = true;
+    cerradoSup = true;
 
-// implementacion o definicion de metodos y funciones
+    if(valido(cotaInferior,cotaSuperior,cerradoInf,cerradoSup)){
+        cotaInf=cotaInferior;
+        cotaSup=cotaSuperior;
 
- bool Intervalo::valido(double cinf,double csup, bool cerrinf, bool cerrsup){
-return (( cinf < csup ) || ( cinf == csup && cerrinf == cerrsup));
- }
+    }else{
 
+        cerradoInf =false;
+        cerradoSup = false;
+        cotaInf = 0;
+        cotaSup = 0;
+
+    }
+}
+
+//Constructor 2 con parametros
+Intervalo::Intervalo(double cotaInferior, double cotaSuperior,bool cerradoInferior, bool cerradoSuperior){
+   
+   if(valido(cotaInferior,cotaSuperior,cerradoInf,cerradoSup)){
+        cotaInf=cotaInferior;
+        cotaSup=cotaSuperior;
+        cerradoSup=cerradoSuperior;
+        cerradoInf= cerradoInferior;
+
+
+    }else{
+
+        cerradoInf =false;
+        cerradoSup = false;
+        cotaInf = 0;
+        cotaSup = 0;
+
+    }
+}
+//_____________________________Consultores__________________________________
+
+//Consultor de la cota inferior
+double Intervalo:: getCotaInf()const{
+    return cotaInf;
+}
+
+//Consultor de la cota Superior
+double Intervalo:: getCotaSup()const{
+    return cotaSup;
+}
+
+//Consulta si es cerrado en la cota inferior
+bool Intervalo:: dentroCotaInf()const{
+    return cerradoInf;
+}
+
+//Consulta si es cerrado en la cota superior
+bool Intervalo:: dentroCotaSup()const{
+    return cerradoSup;
+}
+
+//______________________________Otros____________________________________
+
+//Modificar el intervalo
+void Intervalo:: setIntervalo(double cotaInferior, double cotaSuperior,bool cerradoInferior, bool cerradoSuperior){
+   
+    if(valido(cotaInferior,cotaSuperior,cerradoInf,cerradoSup)){
+        cotaInf=cotaInferior;
+        cotaSup=cotaSuperior;
+        cerradoSup=cerradoSuperior;
+        cerradoInf= cerradoInferior;
+
+    }else{
+        cout << "Intervalo no valido";
+    }
+
+  }
+
+//Te devuelve si un intervalo es vacio
+bool Intervalo:: esVacio()const{
+    bool es_vacio= false;
+
+    if( cerradoInf == false &&  cerradoSup == false &&  cotaInf == 0 && cotaSup == 0){
+        es_vacio = true;
+    }
+    return es_vacio;
+}
+
+//te devuelve si el numero esta dentro 
+bool Intervalo:: estaDentro(double n)const{
+    bool dentro = false;
+
+    if(n >= cotaInf && n<= cotaSup){
+        
+        if(n == cotaSup && cerradoSup)
+            dentro= true;
+        else 
+            if(n == cotaInf && cerradoInf)
+                dentro= true;
+        else 
+            if( n < cotaSup && n > cotaInf )
+                dentro=true;
+
+    }
+    return dentro;
+}
+
+
+//_________________________________________________________________________________________________________________
+
+//Funciones auxiliares
 void escribir(const Intervalo & obj) {
     if (obj.esVacio())
         cout << "(0)";
@@ -155,6 +173,7 @@ void leer(Intervalo & obj){
     double cotaInf, cotaSup;
     char car;
     cin >> car;
+    
     if (car == '(')
         cerradoInf = false;
     cin >> cotaInf;
@@ -175,39 +194,3 @@ void comprobarVacio(Intervalo obj){
 }
 
 
-int main(){
-    const int CAPACIDAD = 10;
-    int i, nintervalos, nvalores;
-    Intervalo vacio;
-    Intervalo punto(1,1); // intervalo formado por un punto
-    Intervalo interv[CAPACIDAD];
-    double v[CAPACIDAD];
-    
-    cout << "Cuantos intervalos (max 10):";
-    do{
-        cin >> nintervalos;
-    } while (nintervalos >10);
-    
-    cout << "Introduce [ o ( cotaInferior, cotaSuperior ) o ]";
-    for(i=0; i < nintervalos; i++)
-        leer(interv[i]);
-
-    cout << "Cuantos valores reales (max 10):";
-    do{
-        cin >> nvalores;
-    } while (nvalores >10);
-    
-    cout << "Introduce valor real: ";
-    for(i = 0; i < nvalores; i++)
-        cin >> v[i];
-    
-    for(i = 0; i < nintervalos; i++){
-      escribir(interv[i]);
-      cout << " : ";
-      for (int j = 0; j < nvalores; j++){
-        if (interv[i].estaDentro(v[j]))
-            cout << v[j] <<" ";
-      }
-      cout << endl;
-    }
-}
